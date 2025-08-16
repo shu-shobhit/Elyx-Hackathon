@@ -24,7 +24,7 @@ def router_init_node(state: ConversationalState) -> ConversationalState:
 
     try:
         chosen = json.loads(out)
-        chosen = [c for c in chosen if c in AGENT_KEYS][:3]
+        chosen = [c for c in chosen if c in AGENT_KEYS]
     except Exception:
         chosen = []
 

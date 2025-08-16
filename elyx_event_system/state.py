@@ -23,7 +23,7 @@ class AgentOutput(TypedDict):
 class ConversationalState(TypedDict):
     # Inputs
     message: str                           # current (simulated) member message or synthesized snippet
-    chat_history: Annotated[List[ChatMsg], operator.add]            # full running conversation log
+    chat_history: Annotated[List[ChatMsg], operator.add]         # full running conversation log
     member_state: Dict[str, Any]           # evolving facts (adherence, travel, labs...)
     week_index: int                        # optional – for scheduled rules
 
