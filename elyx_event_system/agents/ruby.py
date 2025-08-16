@@ -32,8 +32,21 @@ def ruby_node(state: ConversationalState) -> ConversationalState:
             payload["message"] = content
         if "proposed_event" not in payload:
             payload["proposed_event"] = None
+        if "needs_expert" not in payload:
+            payload["needs_expert"] = "false"
+        if "expert_needed" not in payload:
+            payload["expert_needed"] = None
+        if "routing_reason" not in payload:
+            payload["routing_reason"] = ""
     except Exception:
-        payload = {"agent": "Ruby", "message": content, "proposed_event": None}
+        payload = {
+            "agent": "Ruby", 
+            "message": content, 
+            "proposed_event": None,
+            "needs_expert": "false",
+            "expert_needed": None,
+            "routing_reason": ""
+        }
 
     # Update shared state
     append_agent_response(state, payload)
