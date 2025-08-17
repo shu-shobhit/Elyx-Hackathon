@@ -34,7 +34,14 @@ def init_member_node(state: ConversationalState) -> ConversationalState:
     # Update the main ConversationalState
     state['member_state'] = initial_member_state
     state['chat_history'] = [] # Start with an empty chat history
-    state['week_index'] = 1    # Start at week 1
+    
+    # Preserve week and thread tracking (these should already be set by main.py)
+    if 'week_index' not in state:
+        state['week_index'] = 1
+    if 'thread_index' not in state:
+        state['thread_index'] = 1
+    if 'message_in_thread' not in state:
+        state['message_in_thread'] = 0
     
     return state
 
@@ -45,31 +52,28 @@ def member_node(state: ConversationalState) -> ConversationalState:
     initiate a new topic or respond to the Elyx team.
     """
     print("--- Running Node: member_node ---")
-    model = llm(temperature=0.8) # Higher temperature for creative, human-like messages
+    model = llm(temperature=0.8)
     
-    # Determine the task: Is this the first message or a reply?
-    if not state.get('chat_history'):
-        task = "initiate"
-        task_description = """ Generate an initial query from Alex Tan to the Elyx health consultants team based on the following information:
-                            Top three health/performance goals (with target dates):
-                            Reduce risk of heart disease (due to family history) by maintaining healthy cholesterol and blood pressure levels by December 2026.
-                            Enhance cognitive function and focus for sustained mental performance in a demanding work environment by June 2026.
-                            Implement annual full-body health screenings for early detection of debilitating diseases, starting November 2025.
-                            “Why now?” – Intrinsic motivations & external drivers:
-                            Family history of heart disease; strong desire to proactively manage health for long-term career performance and to remain present and active for his young children.
-                            Success metrics Alex cares about:
-                            Blood panel markers (cholesterol, blood pressure, inflammatory markers), cognitive assessment scores, sleep quality (Garmin data), stress resilience (subjective self-assessment, Garmin HRV).
+    # --- NEW LOGIC to determine the task ---
+    chat_history = state.get('chat_history', [])[-10:]
+    new_thread_required = state.get('new_thread_required', False)
 
-                            The output message should be written as a professional, concise, and goal-oriented initial message from Alex Tan to Elyx, expressing your initial problems and motivations.
-                            """
+    if not chat_history:
+        task = "initiate_onboarding"
+        task_description = "This is your very first message to the Elyx team. Introduce yourself and state your primary health goals."
+    elif new_thread_required:
+        task = "initiate_new_conversation_thread"
+        task_description = "The previous conversation has ended. Start a NEW conversation on a completely different topic. Base your new query on your persona and the simulation rules (e.g., upcoming travel, a question about your Garmin data, a new health trend you read about, or scheduling your next diagnostic test)."
+        # CRITICAL: Reset the flag after using it.
+        state['new_thread_required'] = False
     else:
         task = "respond"
-        task_description = "The Elyx team has just sent you one or more messages. Based on your current state and the last few messages, generate a realistic response. Decide if you are expecting another reply or if this turn of the conversation is over."
+        task_description = "You are in the middle of a conversation. Generate a realistic response to the last message from the Elyx team."
 
     # Build the context for the LLM
     context = {
         "task": task,
-        "task_description": task_description,
+        # "task_description": task_description,
         "member_state": state.get("member_state", {}),
         "recent_chat": state.get("chat_history", [])[-5:], # Provide last 5 messages for context
         "week_index": state.get("week_index", 1)
@@ -85,7 +89,14 @@ def member_node(state: ConversationalState) -> ConversationalState:
         # Ensure the payload has the required keys
         message_text = payload.get("message", "Sorry, I'm not sure what to say.")
         decision = payload.get("decision", "END_TURN")
-        print(f"  -> Member says: '{message_text}' (Decision: {decision})")
+        is_travel_related = payload.get("is_travel_related", False)
+        # print(f"  -> Member says: '{message_text}' (Decision: {decision})")
+        if is_travel_related:
+            if 'simulation_counters' in state['member_state']:
+                state['member_state']['simulation_counters']['weeks_since_last_trip'] = 0
+                print("  -> Travel topic detected. Resetting weeks_since_last_trip to 0.")
+            else:
+                print("  -> WARNING: is_travel_related was true but simulation_counters not found in state.")
 
     except Exception:
         print(f"  -> ERROR: Could not parse member_node JSON: {content}")
@@ -98,6 +109,24 @@ def member_node(state: ConversationalState) -> ConversationalState:
     
     # Add the member's message to the history
     append_message(state, role="member", agent="member", text=message_text, meta={"decision": decision})
+    
+    # Print the response with timestamp
+    # Get the timestamp from the last message in chat history
+    chat_history = state.get("chat_history", [])
+    if chat_history:
+        timestamp = chat_history[-1].get("timestamp", "")
+        if timestamp:
+            try:
+                from datetime import datetime
+                dt = datetime.fromisoformat(timestamp)
+                time_str = dt.strftime("%a, %b %d, %I:%M %p")
+                print(f"  [{time_str}] Member says: '{message_text}' (Decision: {decision})")
+            except ValueError:
+                print(f"  Member says: '{message_text}' (Decision: {decision})")
+        else:
+            print(f"  Member says: '{message_text}' (Decision: {decision})")
+    else:
+        print(f"  Member says: '{message_text}' (Decision: {decision})")
     
     # The 'decision' field can now be used by LangGraph's conditional routing
     # to decide whether to go to Ruby or to end the loop.
