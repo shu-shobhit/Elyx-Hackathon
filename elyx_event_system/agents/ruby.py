@@ -7,7 +7,7 @@ from utils import llm, append_message, append_agent_response
 from state import ConversationalState
 from pprint import pprint
 def ruby_node(state: ConversationalState) -> ConversationalState:
-    model = llm(temperature=0.5)
+    model = llm(temperature=0.6)
     
     # Build context from shared state
     context = {
@@ -53,8 +53,24 @@ def ruby_node(state: ConversationalState) -> ConversationalState:
     append_message(state, role="ruby", agent="Ruby", text=payload.get("message", ""), 
                   meta={"source": "agent", "week_index": state.get("week_index", 0)})
     
-    # Print the response
-    print(f"  -> Ruby says: '{payload.get('message', '')}'")
+    # Print the response with timestamp
+    message_text = payload.get("message", "")
+    # Get the timestamp from the last message in chat history
+    chat_history = state.get("chat_history", [])
+    if chat_history:
+        timestamp = chat_history[-1].get("timestamp", "")
+        if timestamp:
+            try:
+                from datetime import datetime
+                dt = datetime.fromisoformat(timestamp)
+                time_str = dt.strftime("%a, %b %d, %I:%M %p")
+                print(f"  [{time_str}] Ruby says: '{message_text}'")
+            except ValueError:
+                print(f"  Ruby says: '{message_text}'")
+        else:
+            print(f"  Ruby says: '{message_text}'")
+    else:
+        print(f"  Ruby says: '{message_text}'")
     
     state['message'] = payload.get("message", content)
     

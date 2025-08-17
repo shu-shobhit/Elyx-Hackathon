@@ -7,7 +7,7 @@ from pprint import pprint
 from state import ConversationalState
 from utils import llm, append_message, append_agent_response
 from agents import AGENT_KEYS, AGENT_NODE_MAP, AGENT_FUNC_MAP
-from agents.member import init_member_node, member_node
+from agents.member import member_node
 from prompts import DECISION_SYSTEM_PROMPT
 
 # -------- Decider Function: Uses LLM to decide which node should come next ----------
@@ -16,54 +16,72 @@ def decide_next_node(state: ConversationalState) -> str:
     Uses LLM to analyze the current conversation state and decide which agent
     should respond next, if the member should speak next, or if the conversation should end.
     """
-    print("--- Running Node: decider_node ---")
+    print("--- Running Node: Decider ---")
     
-    # Get the current conversation context
-    chat_history = state.get("chat_history", [])
-    member_state = state.get("member_state", {})
-    current_message = state.get("message", "")
-    member_decision = state.get("member_decision", "CONTINUE_CONVERSATION")
-    agent_responses = state.get("agent_responses", {})
-    # Check if member wants to end the conversation
-    if member_decision == "END_TURN":
-        print(f"  -> Member decided to end turn, ending conversation")
-        return "END"
-    
-    # # Build context for the LLM
-    # context = {
-    #     "current_message": current_message,
-    #     "recent_chat": chat_history[-10:-1] if chat_history else [], # Last 10 messages
-    #     "recent_agent_responses" : agent_responses[-5:],
-    #     "member_state": member_state,
-    # }
+    # First, check for the member's explicit decision to end the turn.
+    if state.get("member_decision") == "END_TURN":
+        print("  -> Member ended their turn. Ending conversation loop.")
+        return "END"  # Return "END" to match the conditional edges
 
-    context = f"""Here is the current conversational state. Analyze it according to your instructions and provide your single-word decision.
-CURRENT_STATE:
-{json.dumps(state, indent=2, default=str)}
-"""
-    model = llm(temperature=0.2)  # Low temperature for consistent decisions
+    # --- CONTEXT DISTILLATION ---
+    # Extract only the necessary information from the full state.
+    chat_history = state.get("chat_history", [])
+    agent_responses = state.get("agent_responses", [])
+    member_state = state.get("member_state", {})
+
+    # Determine the last speaker to enforce turn-taking.
+    last_speaker_role = chat_history[-1]['role'] if chat_history else 'member'
+    
+    # Create a concise summary of the recent conversation.
+    chat_summary = [
+        f"{msg.get('agent') or msg.get('role', 'unknown')}: {msg.get('text', '')}"
+        for msg in chat_history[-10:] # Last 5 messages are enough for context
+    ]
+
+    # Get the last agent's structured output, which is critical for handoffs.
+    last_agent_structured_response = agent_responses[-1] if agent_responses else {}
+
+    # Create a minimal summary of the member's profile for routing context.
+    member_summary = {
+        "name": member_state.get("name"),
+        "goals": member_state.get("goals"),
+        "risk_factors": member_state.get("risk_factors")
+    }
+
+    # Assemble the final, token-efficient context object.
+    relevant_context = {
+        "last_speaker_role": last_speaker_role,
+        "member_message": state.get("message", ""),
+        "chat_history_summary": chat_summary,
+        "last_agent_structured_response": last_agent_structured_response,
+        "member_summary": member_summary,
+        "available_agents": AGENT_KEYS
+    }
+    human_prompt_content = json.dumps(relevant_context, indent=2)
+
+    model = llm(temperature=0.4) 
     
     try:
         decision = model.invoke([
             SystemMessage(content=DECISION_SYSTEM_PROMPT),
-            HumanMessage(content=context)
-        ]).content.strip()
+            HumanMessage(content=human_prompt_content)
+        ]).content.strip().replace("\"", "")
         
         print(f"  -> Decider chose: {decision}")
         
         # Validate the decision
         if decision == "END":
-            return "END"
+            return "END"  # Return "END" to match the conditional edges
         elif decision == "Member":
             return "Member"
         elif decision in AGENT_KEYS:
             return AGENT_NODE_MAP[decision]
         else:
-            print(f"  -> Invalid decision '{decision}', defaulting to Member")
+            print(f"  -> Invalid decision '{decision}', defaulting to Member.")
             return "Member"
             
     except Exception as e:
-        print(f"  -> Error in decider: {e}, defaulting to Member")
+        print(f"  -> Error in decider: {e}, defaulting to Member.")
         return "Member"
 
 
@@ -82,14 +100,14 @@ def agent_response_collector(state: ConversationalState) -> ConversationalState:
     Collects and processes the agent's response. The agent has already added
     their response to chat history, so this node just passes through the state.
     """
-    print("--- Running Node: agent_response_collector ---")
+    # print("--- Running Node: agent_response_collector ---")
     
     # Get the last agent response for logging
     agent_responses = state.get("agent_responses", [])
     if agent_responses:
         last_response = agent_responses[-1]
         agent_name = last_response.get("agent", "Unknown")
-        print(f"  -> Processed {agent_name}'s response")
+        # print(f"  -> Processed {agent_name}'s response")
     
     return state
 
@@ -101,14 +119,16 @@ def end_conversation_node(state: ConversationalState) -> ConversationalState:
     """
     print("--- Running Node: end_conversation_node ---")
     print("  -> Conversation turn ended")
+    state['new_thread_required'] = True
+    if 'simulation_counters' in state['member_state']:
+        state['member_state']['simulation_counters']['weeks_since_last_trip'] += 1
     return state
 
 
 def build_graph():
     g = StateGraph(ConversationalState)
 
-    # Core nodes
-    g.add_node("InitMember", init_member_node)
+    # Core nodes (removed InitMember)
     g.add_node("Member", member_node)
     g.add_node("Decider", decider_node)
     g.add_node("AgentResponseCollector", agent_response_collector)
@@ -118,9 +138,8 @@ def build_graph():
     for agent_key, func in AGENT_FUNC_MAP.items():
         g.add_node(AGENT_NODE_MAP[agent_key], func)
 
-    # Main flow: Start → InitMember → Member → Decider
-    g.add_edge(START, "InitMember")
-    g.add_edge("InitMember", "Member")
+    # Main flow: Start → Member → Decider (removed InitMember)
+    g.add_edge(START, "Member")
     g.add_edge("Member", "Decider")
     
     # Decider routes to agents, member, or ends conversation

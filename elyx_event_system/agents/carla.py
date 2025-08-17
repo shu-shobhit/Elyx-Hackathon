@@ -7,13 +7,13 @@ from utils import llm, append_message, append_agent_response
 from state import ConversationalState
 from pprint import pprint
 def carla_node(state: ConversationalState) -> ConversationalState:
-    model = llm(temperature=0.55)
+    model = llm(temperature=0.6)
     
     # Build context from shared state
     context = {
         "message": state.get("message", ""),
         "member_state": state.get("member_state", {}),
-        "recent_chat": state.get("chat_history", [])[-20:],
+        "recent_chat": state.get("chat_history", [])[-10:],
         "week_index": state.get("week_index", 0),
         "current_agent": state.get("current_agent", "Carla")
     }
@@ -40,7 +40,26 @@ def carla_node(state: ConversationalState) -> ConversationalState:
     append_message(state, role="carla", agent="Carla", text=payload.get("message", ""), 
                   meta={"source": "agent", "week_index": state.get("week_index", 0)})
     
-    # Print the response
-    print(f"  -> Carla says: '{payload.get('message', '')}'")
+    # Print the response with timestamp
+    message_text = payload.get("message", "")
+    # Get the timestamp from the last message in chat history
+    chat_history = state.get("chat_history", [])
+    if chat_history:
+        timestamp = chat_history[-1].get("timestamp", "")
+        if timestamp:
+            try:
+                from datetime import datetime
+                dt = datetime.fromisoformat(timestamp)
+                time_str = dt.strftime("%a, %b %d, %I:%M %p")
+                print(f"  [{time_str}] Carla says: '{message_text}'")
+            except ValueError:
+                print(f"  Carla says: '{message_text}'")
+        else:
+            print(f"  Carla says: '{message_text}'")
+    else:
+        print(f"  Carla says: '{message_text}'")
+    
+    # Update the message field in state for the next iteration
+    state['message'] = payload.get("message", content)
     
     return state
