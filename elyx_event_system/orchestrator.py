@@ -8,7 +8,7 @@ from state import ConversationalState
 from utils import llm, append_message, append_agent_response
 from agents import AGENT_KEYS, AGENT_NODE_MAP, AGENT_FUNC_MAP
 from agents.member import init_member_node, member_node
-
+from prompts import DECISION_SYSTEM_PROMPT
 
 # -------- Decider Function: Uses LLM to decide which node should come next ----------
 def decide_next_node(state: ConversationalState) -> str:
@@ -29,52 +29,24 @@ def decide_next_node(state: ConversationalState) -> str:
         print(f"  -> Member decided to end turn, ending conversation")
         return "END"
     
-    # Build context for the LLM
-    context = {
-        "current_message": current_message,
-        "recent_chat": chat_history[-10:-1] if chat_history else [], # Last 10 messages
-        "recent_agent_responses" : agent_responses[-5:],
-        "member_state": member_state,
-    }
-    
-    
-    # Create the decision prompt
-    decision_prompt = f"""
-You are the conversation flow controller for Elyx, a preventative healthcare service.
+    # # Build context for the LLM
+    # context = {
+    #     "current_message": current_message,
+    #     "recent_chat": chat_history[-10:-1] if chat_history else [], # Last 10 messages
+    #     "recent_agent_responses" : agent_responses[-5:],
+    #     "member_state": member_state,
+    # }
 
-**Current Context:**
-- Member's latest message: "{current_message}"
-- Recent conversation: {json.dumps([msg.get('text', '') for msg in context['recent_chat']], indent=2)}
-- Member state: {json.dumps(member_state, indent=2)}
-
-**Available Options:**
-- Ruby: Concierge/Primary contact (general coordination, logistics)
-- DrWarren: Medical strategist (labs, diagnostics, clinical decisions)
-- Advik: Performance scientist (wearable data, sleep, HRV analysis)
-- Carla: Nutritionist (diet, CGM, supplements)
-- Rachel: Physiotherapist (exercise, mobility, rehab)
-- Neel: Strategic lead (QBRs, long-term planning)
-- Member: Let the member speak next (they should respond to the last agent)
-- END: End the conversation
-
-**Decision Rules:**
-1. **CRITICAL**: If the last message in the conversation is from an agent, then choose next among other options.
-2. If the last message is from the member and requires a response, choose the most appropriate agent.
-3. If the conversation feels complete and the member feels satisfied, return "END".
-4. Ruby should handle general questions and coordination.
-5. Specialized questions should go to the appropriate expert.
-6. **IMPORTANT**: After ANY agent responds, typically the member should have a chance to reply before another agent speaks.
-
-**Output Format:**
-Return ONLY the agent name (e.g., "Ruby", "DrWarren"), "Member", or "END".
+    context = f"""Here is the current conversational state. Analyze it according to your instructions and provide your single-word decision.
+CURRENT_STATE:
+{json.dumps(state, indent=2, default=str)}
 """
-
-    model = llm(temperature=0.1)  # Low temperature for consistent decisions
+    model = llm(temperature=0.2)  # Low temperature for consistent decisions
     
     try:
         decision = model.invoke([
-            SystemMessage(content="You are a conversation flow controller. Respond with only the agent name, 'Member', or 'END'."),
-            HumanMessage(content=decision_prompt)
+            SystemMessage(content=DECISION_SYSTEM_PROMPT),
+            HumanMessage(content=context)
         ]).content.strip()
         
         print(f"  -> Decider chose: {decision}")
