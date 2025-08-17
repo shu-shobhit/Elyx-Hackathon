@@ -1,0 +1,752 @@
+{
+  "week_number": 1,
+  "timestamp": "2025-08-18T05:09:25.220361",
+  "state": {
+    "week_index": 1,
+    "thread_index": 4,
+    "message_in_thread": 5,
+    "message": "Thanks, Carla, for the detailed travel nutrition guide. I'll review it carefully and incorporate the suggested tips into my daily routine during my trip. I appreciate your help in prioritizing my nutrition plan while traveling.",
+    "chat_history": [
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "Hi, I'm Rohan Patel. As we begin, I'd like to discuss my goals, specifically reducing the risk of heart disease. Can you provide an overview of the plan to help me achieve this goal, considering my family history and high-stress occupation?",
+        "msg_id": "9eedb6b1-46b5-447f-a555-e389acceacc4",
+        "timestamp": "2024-12-30T09:15:25.118880",
+        "event_id": null,
+        "meta": {
+          "decision": "CONTINUE_CONVERSATION"
+        }
+      },
+      {
+        "role": "ruby",
+        "agent": "Ruby",
+        "text": "{\n  \"agent\": \"Ruby\",\n  \"message\": \"Hi Rohan, thank you for sharing your goals and concerns about reducing the risk of heart disease. I understand the importance of considering your family history and high-stress occupation. I've reviewed your profile, and I'm happy to provide a comprehensive overview of your personalized plan. Our team will work together to ensure you're on track to achieving your goals. \n\nTo begin, Dr. Warren will review your family history and medical data to create a tailored plan for reducing your risk of heart disease. Meanwhile, Carla, our nutritionist, will work with you to develop a customized diet plan that suits your lifestyle and preferences. We'll also schedule regular check-ins to monitor your progress and make adjustments as needed.\n\nIn terms of your high-stress occupation, we'll focus on stress resilience techniques and provide guidance on managing your workload effectively. Rachel, our physiotherapist, will create an exercise plan that suits your schedule and preferences, incorporating your morning routine and occasional runs.\n\nI've attached a detailed document outlining your personalized plan, including a nutrition guide, exercise schedule, and stress management techniques. Please review it, and let me know if you have any questions or concerns. We're committed to helping you achieve your goals, Rohan.\",\n  \"needs_expert\": \"true\",\n  \"expert_needed\": \"DrWarren\",\n  \"routing_reason\": \"Medical strategy and lab results review\",\n  \"analysis\": \"Rohan's goal is to reduce the risk of heart disease, considering his family history and high-stress occupation. A comprehensive plan requires input from multiple experts, including Dr. Warren for medical strategy, Carla for nutrition, Rachel for exercise, and Advik for performance monitoring.\",\n  \"recommendations\": [\"Schedule a call with Dr. Warren to review medical strategy\", \"Begin customized nutrition plan with Carla\", \"Start exercise routine with Rachel\", \"Monitor progress and adjust plan as needed\"],\n  \"medications\": [],\n  \"tests\": [],\n  \"confidence\": 0.95,\n  \"proposed_event\": {\n    \"type\": \"Scheduling\",\n    \"description\": \"Schedule a call with Dr. Warren to review medical strategy\",\n    \"reason\": \"To discuss Rohan's family history and medical data for a tailored plan\",\n    \"priority\": \"High\",\n    \"metadata\": {}\n  }\n}",
+        "msg_id": "2bde348a-bccc-4cce-a6e0-13f2f6f8864d",
+        "timestamp": "2024-12-30T09:28:25.118880",
+        "event_id": null,
+        "meta": {
+          "source": "agent",
+          "week_index": 1
+        }
+      },
+      {
+        "role": "dr_warren",
+        "agent": "DrWarren",
+        "text": "Rohan, I've reviewed your family history and medical data. Based on your goals and risk factors, I recommend a comprehensive plan to reduce your risk of heart disease. I've analyzed your profile and identified key areas for improvement. My medical strategy focuses on addressing your elevated ApoB levels, which are a significant risk factor for heart disease. To achieve this, I'm delegating the implementation of a nutrition protocol to Carla, our expert nutritionist. She will work with you to design a customized diet plan that suits your lifestyle and preferences, focusing on reducing your ApoB levels. Additionally, I recommend scheduling regular check-ins to monitor your progress and make adjustments as needed. I've attached a detailed document outlining my analysis and recommendations.",
+        "msg_id": "bce5ceec-70f7-497c-b88c-3c6fcaf7d389",
+        "timestamp": "2024-12-30T09:46:25.118880",
+        "event_id": null,
+        "meta": {
+          "source": "agent",
+          "week_index": 1
+        }
+      },
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "Thank you, Dr. Warren, for your detailed analysis and recommendations. I've reviewed the attached document and appreciate the tailored approach to reducing my risk of heart disease. I'm comfortable with the nutrition protocol and exercise plan outlined. Can you please clarify how you'll monitor my progress and adjust the plan as needed?",
+        "msg_id": "c2d9e9be-2b4f-4fa4-bfe3-e4bcdbf49e5c",
+        "timestamp": "2024-12-30T11:02:25.118880",
+        "event_id": null,
+        "meta": {
+          "decision": "CONTINUE_CONVERSATION"
+        }
+      },
+      {
+        "role": "dr_warren",
+        "agent": "DrWarren",
+        "text": "Rohan, I'm glad you're comfortable with the nutrition protocol and exercise plan outlined. To monitor your progress, I'll review your monthly consolidated health reports, focusing on key trends and actionable insights. I'll also schedule regular check-ins to assess your adherence to the plan and make adjustments as needed. Additionally, I'll work closely with Carla to monitor your nutrition protocol's effectiveness in reducing your ApoB levels. If necessary, we'll adjust the plan to ensure you're on track to achieving your goals. I'll also keep a close eye on your cognitive assessment scores, sleep quality, and stress resilience to ensure our plan is comprehensive and effective.",
+        "msg_id": "9c07fe47-2b65-4fe8-bf08-6995643f39e2",
+        "timestamp": "2024-12-30T11:19:25.118880",
+        "event_id": null,
+        "meta": {
+          "source": "agent",
+          "week_index": 1
+        }
+      },
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "I understand the plan and appreciate the comprehensive approach. How will my Garmin watch data be used to monitor my progress, and what specific metrics will be tracked to assess my sleep quality and stress resilience?",
+        "msg_id": "3733036a-c7dd-4313-a304-0d966511170d",
+        "timestamp": "2024-12-30T12:44:25.118880",
+        "event_id": null,
+        "meta": {
+          "decision": "CONTINUE_CONVERSATION"
+        }
+      },
+      {
+        "role": "advik",
+        "agent": "Advik",
+        "text": "Great question, Rohan! Your Garmin watch data will be used to monitor your progress in terms of sleep quality and stress resilience. Specifically, we'll track your sleep duration, deep sleep percentage, and sleep fragmentation to assess your sleep quality. For stress resilience, we'll monitor your heart rate variability (HRV) and resting heart rate (RHR) to gauge your body's response to stress. These metrics will provide valuable insights into your overall sleep quality and stress resilience, enabling us to make data-driven adjustments to your plan as needed.",
+        "msg_id": "16644aa9-c650-4199-a113-14f7b852eba7",
+        "timestamp": "2024-12-30T12:49:25.118880",
+        "event_id": null,
+        "meta": {
+          "source": "agent",
+          "week_index": 1
+        }
+      },
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "Thank you, Advik, for clarifying how my Garmin watch data will be used to monitor my progress. I'm comfortable with the sleep quality and stress resilience metrics you've outlined.",
+        "msg_id": "23dfe1aa-feae-486c-9cc9-d8643b413c21",
+        "timestamp": "2024-12-30T14:06:25.118880",
+        "event_id": null,
+        "meta": {
+          "decision": "END_TURN"
+        }
+      },
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "I'd like to discuss my upcoming travel plans and how they might impact my exercise routine. I have a trip coming up in 3 weeks. Can we review my schedule and adjust my exercise plan accordingly?",
+        "msg_id": "67ddac1a-1f08-4048-8026-709ee221a8a6",
+        "timestamp": "2024-12-31T13:07:37.887000",
+        "event_id": null,
+        "meta": {
+          "decision": "CONTINUE_CONVERSATION"
+        }
+      },
+      {
+        "role": "rachel",
+        "agent": "Rachel",
+        "text": "Rohan, great to discuss your upcoming travel plans. Given your trip in 3 weeks, I recommend reviewing your schedule and adjusting your exercise plan to ensure minimal disruption. Let's work together to create a flexible routine that accommodates your travel schedule. I'll design a modified exercise plan that you can follow during your trip, focusing on bodyweight exercises and minimal equipment requirements. This will help you maintain consistency and minimize the impact of travel on your exercise routine.",
+        "msg_id": "f4997668-ee21-4ac9-b793-5638bfe6936b",
+        "timestamp": "2024-12-31T13:16:37.887000",
+        "event_id": null,
+        "meta": {
+          "source": "agent",
+          "week_index": 1
+        }
+      },
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "Thank you, Rachel. I appreciate your attention to my travel schedule and the effort to minimize disruption to my exercise routine. I'm looking forward to seeing the modified exercise plan you've designed for my trip.",
+        "msg_id": "fca291ad-d7fc-42dd-9fdc-feaa7816f277",
+        "timestamp": "2024-12-31T14:35:37.887000",
+        "event_id": null,
+        "meta": {
+          "decision": "END_TURN"
+        }
+      },
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "I'd like to schedule a diagnostic test, as it's been 0 weeks since my last one. Can we arrange for the test to be done at my earliest convenience?",
+        "msg_id": "de6777ae-7848-4c45-a7e2-547c6a4da8dd",
+        "timestamp": "2025-01-01T16:46:29.473518",
+        "event_id": null,
+        "meta": {
+          "decision": "CONTINUE_CONVERSATION"
+        }
+      },
+      {
+        "role": "dr_warren",
+        "agent": "DrWarren",
+        "text": "Rohan, I've reviewed your request for a diagnostic test. Given your goals and risk factors, I recommend scheduling a comprehensive diagnostic test to assess your current health status. This test will provide valuable insights into your biomarkers, including cholesterol, blood pressure, and inflammatory markers. I've reviewed your schedule and arranged for the test to be done at your earliest convenience. Ruby will coordinate the logistics and schedule the test according to your travel plans.",
+        "msg_id": "2ace154b-cb00-4143-9dfc-27836ed0cb93",
+        "timestamp": "2025-01-01T18:14:29.473518",
+        "event_id": null,
+        "meta": {
+          "source": "agent",
+          "week_index": 1
+        }
+      },
+      {
+        "role": "ruby",
+        "agent": "Ruby",
+        "text": "I've coordinated the logistics for your diagnostic test, Rohan. Considering your travel plans, I've scheduled the test at your earliest convenience. You'll receive a confirmation email with the test details and any necessary instructions. If you have any questions or concerns, please don't hesitate to reach out.",
+        "msg_id": "29a70a7a-816e-4ec7-992c-36392072f875",
+        "timestamp": "2025-01-01T19:40:29.473518",
+        "event_id": null,
+        "meta": {
+          "source": "agent",
+          "week_index": 1
+        }
+      },
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "Thanks for coordinating the diagnostic test, Ruby. I've received the confirmation email and I'm looking forward to getting the test done. Can you please provide me with an update on my current biomarkers, specifically my cholesterol and blood pressure levels, compared to my previous test results?",
+        "msg_id": "9d503551-4f79-487f-b214-091fbbd81eda",
+        "timestamp": "2025-01-01T19:45:29.473518",
+        "event_id": null,
+        "meta": {
+          "decision": "CONTINUE_CONVERSATION"
+        }
+      },
+      {
+        "role": "dr_warren",
+        "agent": "DrWarren",
+        "text": "Rohan, I'd be happy to provide you with an update on your current biomarkers. Based on your previous test results, your cholesterol levels were 220 mg/dL, and your blood pressure was 130/80 mmHg. Compared to your previous test results, your cholesterol levels have increased by 10 mg/dL, and your blood pressure has remained stable. Given your goals and risk factors, I recommend that we focus on reducing your cholesterol levels through a combination of diet and exercise. I'll work with Carla to design a nutrition plan that targets cholesterol reduction, and Rachel will develop an exercise routine that complements your travel schedule.",
+        "msg_id": "00aefcdc-0208-4655-9c3f-bc09cb3932d8",
+        "timestamp": "2025-01-01T21:12:29.473518",
+        "event_id": null,
+        "meta": {
+          "source": "agent",
+          "week_index": 1
+        }
+      },
+      {
+        "role": "carla",
+        "agent": "Carla",
+        "text": "Rohan, I've reviewed your biomarkers and goals. Given your increased cholesterol levels, I recommend a nutrition plan that targets cholesterol reduction. I'll work with your cook to design a meal plan that incorporates heart-healthy foods, such as lean proteins, whole grains, and vegetables rich in fiber and antioxidants. Specifically, I suggest increasing your intake of omega-3 fatty acids, vitamin D, and potassium-rich foods. I've attached a detailed nutrition document with 5 heart-healthy recipes focusing on lean proteins and complex carbs. I've also included a section on healthy travel snacks as I know you travel frequently. Let me know if you have any questions after reviewing it with your cook.",
+        "msg_id": "57d265df-6bb7-466c-9d6b-1cede0894a2e",
+        "timestamp": "2025-01-01T21:28:29.473518",
+        "event_id": null,
+        "meta": {
+          "source": "agent",
+          "week_index": 1
+        }
+      },
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "Thank you, Carla, for the detailed nutrition document and heart-healthy recipes. I'll review them with my cook and incorporate the suggested changes into my meal plan.",
+        "msg_id": "38f4ceeb-38c6-421b-9411-c91a73aa38fb",
+        "timestamp": "2025-01-01T22:55:29.473518",
+        "event_id": null,
+        "meta": {
+          "decision": "END_TURN"
+        }
+      },
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "I've reviewed the nutrition document and heart-healthy recipes. Considering my upcoming travel plans, I'd like to discuss how to effectively implement the meal plan while on the road. Can we schedule a call to review some travel-friendly options?",
+        "msg_id": "965e2f1e-b81d-4806-ac54-0e589fd9b5c3",
+        "timestamp": "2025-01-02T11:02:32.077456",
+        "event_id": null,
+        "meta": {
+          "decision": "CONTINUE_CONVERSATION"
+        }
+      },
+      {
+        "role": "carla",
+        "agent": "Carla",
+        "text": "I'd be happy to discuss how to implement your meal plan while traveling. Considering your busy schedule, I recommend focusing on portable, non-perishable snacks and meals that can be easily prepared in a hotel room or on-the-go. I've attached a list of travel-friendly food options that align with your heart-healthy nutrition plan. Let's schedule a call to review these options in more detail and discuss any specific challenges you anticipate during your trip.",
+        "msg_id": "85a68897-22bc-414e-89e2-705d7619dd72",
+        "timestamp": "2025-01-02T11:12:32.077456",
+        "event_id": null,
+        "meta": {
+          "source": "agent",
+          "week_index": 1
+        }
+      },
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "Thanks, Carla. I've reviewed the travel-friendly food options you provided. For my upcoming trip, I'd like to discuss how to incorporate these snacks into my daily routine, considering my packed schedule and potential time-zone adjustments. Can you provide some suggestions on how to prioritize my nutrition plan while traveling?",
+        "msg_id": "55514c33-610e-49e2-9a85-15e8905970ae",
+        "timestamp": "2025-01-02T11:21:32.077456",
+        "event_id": null,
+        "meta": {
+          "decision": "CONTINUE_CONVERSATION"
+        }
+      },
+      {
+        "role": "carla",
+        "agent": "Carla",
+        "text": "Rohan, I understand the challenges of maintaining a healthy nutrition plan while traveling. To prioritize your nutrition plan during your trip, I recommend the following: 1) Pack non-perishable snacks like nuts, seeds, and dried fruits to curb unhealthy impulse snacking. 2) Identify healthy food options at your travel destinations and plan your meals accordingly. 3) Consider meal prepping or using a meal delivery service that aligns with your heart-healthy nutrition plan. 4) Stay hydrated by drinking plenty of water throughout the day. 5) Adjust your meal schedule according to your new time zone to minimize disruptions to your body's natural rhythm. I've attached a detailed travel nutrition guide that provides more specific tips and recommendations for your trip. Let's schedule a call to review these suggestions in more detail and discuss any specific challenges you anticipate during your trip.",
+        "msg_id": "60b985db-7b8e-4a63-9e9e-f294899c204f",
+        "timestamp": "2025-01-02T12:42:32.077456",
+        "event_id": null,
+        "meta": {
+          "source": "agent",
+          "week_index": 1
+        }
+      },
+      {
+        "role": "member",
+        "agent": "member",
+        "text": "Thanks, Carla, for the detailed travel nutrition guide. I'll review it carefully and incorporate the suggested tips into my daily routine during my trip. I appreciate your help in prioritizing my nutrition plan while traveling.",
+        "msg_id": "30db8444-e461-4580-8511-e79f2ea1ea54",
+        "timestamp": "2025-01-02T13:01:32.077456",
+        "event_id": null,
+        "meta": {
+          "decision": "END_TURN"
+        }
+      }
+    ],
+    "member_state": {
+      "name": "Rohan Patel",
+      "age": 46,
+      "location": "Singapore",
+      "goals": [
+        "Reduce risk of heart disease by maintaining healthy cholesterol and blood pressure levels",
+        "Enhance cognitive function and focus for sustained mental performance",
+        "Implement annual full-body health screenings for early detection of debilitating diseases"
+      ],
+      "risk_factors": {
+        "primary": "Family history of heart disease",
+        "secondary": "High-stress occupation"
+      },
+      "plan": {
+        "exercise": "Morning 20-minute routine, occasional runs",
+        "diet": "Nutrition management with the help of a cook at home",
+        "monitoring": "Monthly consolidated health report focusing on key trends and actionable insights",
+        "last_update_week": 0
+      },
+      "adherence_score": 0.85,
+      "current_mood": "Analytical and Driven",
+      "simulation_counters": {
+        "weeks_since_last_trip": 1,
+        "weeks_since_last_diagnostic": 0
+      },
+      "notes": {
+        "personality": "Analytical, driven, values efficiency and evidence-based approaches",
+        "communication_preference": "Prefers executive summaries, use PA for scheduling",
+        "tech_stack": [
+          "Garmin watch",
+          "Considering Oura ring",
+          "Trainerize",
+          "MyFitnessPal",
+          "Whoop"
+        ],
+        "logistics": "Travel calendar provided by PA (Sarah) on a monthly basis; requires flexible scheduling and consideration for time-zone adjustments during frequent travel",
+        "success_metrics": [
+          "Blood panel markers (cholesterol, blood pressure, inflammatory markers)",
+          "Cognitive assessment scores",
+          "Sleep quality (Garmin data)",
+          "Stress resilience (subjective self-assessment, Garmin HRV)"
+        ]
+      }
+    },
+    "pending_agents": [],
+    "current_agent": null,
+    "member_decision": "END_TURN",
+    "active_events": [],
+    "completed_events": [],
+    "agent_responses": [
+      {
+        "agent": "Ruby",
+        "message": "{\n  \"agent\": \"Ruby\",\n  \"message\": \"Hi Rohan, thank you for sharing your goals and concerns about reducing the risk of heart disease. I understand the importance of considering your family history and high-stress occupation. I've reviewed your profile, and I'm happy to provide a comprehensive overview of your personalized plan. Our team will work together to ensure you're on track to achieving your goals. \n\nTo begin, Dr. Warren will review your family history and medical data to create a tailored plan for reducing your risk of heart disease. Meanwhile, Carla, our nutritionist, will work with you to develop a customized diet plan that suits your lifestyle and preferences. We'll also schedule regular check-ins to monitor your progress and make adjustments as needed.\n\nIn terms of your high-stress occupation, we'll focus on stress resilience techniques and provide guidance on managing your workload effectively. Rachel, our physiotherapist, will create an exercise plan that suits your schedule and preferences, incorporating your morning routine and occasional runs.\n\nI've attached a detailed document outlining your personalized plan, including a nutrition guide, exercise schedule, and stress management techniques. Please review it, and let me know if you have any questions or concerns. We're committed to helping you achieve your goals, Rohan.\",\n  \"needs_expert\": \"true\",\n  \"expert_needed\": \"DrWarren\",\n  \"routing_reason\": \"Medical strategy and lab results review\",\n  \"analysis\": \"Rohan's goal is to reduce the risk of heart disease, considering his family history and high-stress occupation. A comprehensive plan requires input from multiple experts, including Dr. Warren for medical strategy, Carla for nutrition, Rachel for exercise, and Advik for performance monitoring.\",\n  \"recommendations\": [\"Schedule a call with Dr. Warren to review medical strategy\", \"Begin customized nutrition plan with Carla\", \"Start exercise routine with Rachel\", \"Monitor progress and adjust plan as needed\"],\n  \"medications\": [],\n  \"tests\": [],\n  \"confidence\": 0.95,\n  \"proposed_event\": {\n    \"type\": \"Scheduling\",\n    \"description\": \"Schedule a call with Dr. Warren to review medical strategy\",\n    \"reason\": \"To discuss Rohan's family history and medical data for a tailored plan\",\n    \"priority\": \"High\",\n    \"metadata\": {}\n  }\n}",
+        "proposed_event": null,
+        "needs_expert": "false",
+        "expert_needed": null,
+        "routing_reason": ""
+      },
+      {
+        "agent": "DrWarren",
+        "message": "Rohan, I've reviewed your family history and medical data. Based on your goals and risk factors, I recommend a comprehensive plan to reduce your risk of heart disease. I've analyzed your profile and identified key areas for improvement. My medical strategy focuses on addressing your elevated ApoB levels, which are a significant risk factor for heart disease. To achieve this, I'm delegating the implementation of a nutrition protocol to Carla, our expert nutritionist. She will work with you to design a customized diet plan that suits your lifestyle and preferences, focusing on reducing your ApoB levels. Additionally, I recommend scheduling regular check-ins to monitor your progress and make adjustments as needed. I've attached a detailed document outlining my analysis and recommendations.",
+        "needs_expert": "true",
+        "expert_needed": "Carla",
+        "routing_reason": "Delegating implementation of a nutrition protocol to the specialist",
+        "analysis": "Rohan's family history and medical data indicate an elevated risk of heart disease. His ApoB levels are high, which is a significant risk factor. A comprehensive plan requires a tailored nutrition protocol to address this.",
+        "recommendations": [
+          "Implement nutrition protocol to reduce ApoB levels",
+          "Schedule regular check-ins to monitor progress"
+        ],
+        "medications": [],
+        "tests": [
+          "Follow-up lipid panel in 3 months"
+        ],
+        "confidence": 0.95,
+        "proposed_event": {
+          "type": "Consultation",
+          "description": "Consultation between Rohan and Carla to design and implement a nutrition protocol for ApoB reduction.",
+          "reason": "To action the clinical strategy for addressing elevated ApoB levels.",
+          "priority": "High",
+          "metadata": {
+            "panel_name": "Lipid Panel",
+            "biomarkers": [
+              "ApoB"
+            ],
+            "imaging_type": null
+          }
+        }
+      },
+      {
+        "agent": "DrWarren",
+        "message": "Rohan, I'm glad you're comfortable with the nutrition protocol and exercise plan outlined. To monitor your progress, I'll review your monthly consolidated health reports, focusing on key trends and actionable insights. I'll also schedule regular check-ins to assess your adherence to the plan and make adjustments as needed. Additionally, I'll work closely with Carla to monitor your nutrition protocol's effectiveness in reducing your ApoB levels. If necessary, we'll adjust the plan to ensure you're on track to achieving your goals. I'll also keep a close eye on your cognitive assessment scores, sleep quality, and stress resilience to ensure our plan is comprehensive and effective.",
+        "needs_expert": "false",
+        "expert_needed": null,
+        "routing_reason": null,
+        "analysis": "Rohan's progress will be monitored through regular check-ins and monthly consolidated health reports, focusing on key trends and actionable insights.",
+        "recommendations": [
+          "Schedule regular check-ins to monitor progress",
+          "Adjust nutrition protocol as needed based on ApoB levels"
+        ],
+        "medications": [],
+        "tests": [],
+        "confidence": 0.95,
+        "proposed_event": {
+          "type": "Consultation",
+          "description": "Schedule a call to review Rohan's progress and adjust the plan as needed.",
+          "reason": "To ensure Rohan is on track to achieving his goals and make adjustments to the plan accordingly.",
+          "priority": "Medium",
+          "metadata": {
+            "panel_name": null,
+            "biomarkers": [
+              "ApoB"
+            ],
+            "imaging_type": null
+          }
+        }
+      },
+      {
+        "agent": "Advik",
+        "message": "Great question, Rohan! Your Garmin watch data will be used to monitor your progress in terms of sleep quality and stress resilience. Specifically, we'll track your sleep duration, deep sleep percentage, and sleep fragmentation to assess your sleep quality. For stress resilience, we'll monitor your heart rate variability (HRV) and resting heart rate (RHR) to gauge your body's response to stress. These metrics will provide valuable insights into your overall sleep quality and stress resilience, enabling us to make data-driven adjustments to your plan as needed.",
+        "needs_expert": "false",
+        "expert_needed": null,
+        "routing_reason": null,
+        "analysis": "Rohan's Garmin watch data will be used to track sleep quality and stress resilience metrics, providing valuable insights for plan adjustments.",
+        "recommendations": [
+          "Continue tracking sleep and HRV data with Garmin watch",
+          "Review monthly consolidated health reports for key trends and actionable insights"
+        ],
+        "medications": [],
+        "tests": [],
+        "confidence": 0.9,
+        "proposed_event": {
+          "type": "Protocol Implementation",
+          "description": "Track sleep quality and stress resilience metrics with Garmin watch",
+          "reason": "To monitor progress and make data-driven adjustments to the plan",
+          "priority": "Medium",
+          "metadata": {
+            "metrics_to_track": [
+              "Sleep Duration",
+              "Deep Sleep Percentage",
+              "Sleep Fragmentation",
+              "HRV",
+              "RHR"
+            ],
+            "wearable_source": "Garmin",
+            "protocol_duration_days": null
+          }
+        }
+      },
+      {
+        "agent": "Rachel",
+        "message": "Rohan, great to discuss your upcoming travel plans. Given your trip in 3 weeks, I recommend reviewing your schedule and adjusting your exercise plan to ensure minimal disruption. Let's work together to create a flexible routine that accommodates your travel schedule. I'll design a modified exercise plan that you can follow during your trip, focusing on bodyweight exercises and minimal equipment requirements. This will help you maintain consistency and minimize the impact of travel on your exercise routine.",
+        "needs_expert": "false",
+        "expert_needed": null,
+        "routing_reason": null,
+        "analysis": "Rohan's travel plans may impact his exercise routine. A modified exercise plan is necessary to ensure consistency and minimal disruption.",
+        "recommendations": [
+          "Review travel schedule and adjust exercise plan accordingly",
+          "Design a modified exercise plan for travel",
+          "Focus on bodyweight exercises and minimal equipment requirements"
+        ],
+        "medications": [],
+        "tests": [],
+        "confidence": 0.95,
+        "proposed_event": {
+          "type": "Exercise Prescription",
+          "description": "Modified Exercise Plan for Travel",
+          "reason": "To accommodate Rohan's travel schedule and minimize disruption to his exercise routine",
+          "priority": "Medium",
+          "metadata": {
+            "focus_areas": [
+              "Travel-friendly exercises",
+              "Bodyweight exercises",
+              "Minimal equipment requirements"
+            ],
+            "duration_weeks": 3,
+            "frequency_per_week": 3
+          }
+        }
+      },
+      {
+        "agent": "DrWarren",
+        "message": "Rohan, I've reviewed your request for a diagnostic test. Given your goals and risk factors, I recommend scheduling a comprehensive diagnostic test to assess your current health status. This test will provide valuable insights into your biomarkers, including cholesterol, blood pressure, and inflammatory markers. I've reviewed your schedule and arranged for the test to be done at your earliest convenience. Ruby will coordinate the logistics and schedule the test according to your travel plans.",
+        "needs_expert": "true",
+        "expert_needed": "Ruby",
+        "routing_reason": "Scheduling diagnostic test",
+        "analysis": "Rohan's goal is to reduce the risk of heart disease, and a comprehensive diagnostic test is necessary to assess his current health status.",
+        "recommendations": [
+          "Schedule diagnostic test",
+          "Review test results and adjust plan as needed"
+        ],
+        "medications": [],
+        "tests": [
+          "Comprehensive diagnostic test"
+        ],
+        "confidence": 0.95,
+        "proposed_event": {
+          "type": "Diagnostic",
+          "description": "Comprehensive diagnostic test to assess Rohan's current health status",
+          "reason": "To assess Rohan's biomarkers and adjust his plan accordingly",
+          "priority": "High",
+          "metadata": {
+            "panel_name": "Comprehensive Diagnostic Panel",
+            "biomarkers": [
+              "Cholesterol",
+              "Blood Pressure",
+              "Inflammatory Markers"
+            ],
+            "imaging_type": null
+          }
+        }
+      },
+      {
+        "agent": "Ruby",
+        "message": "I've coordinated the logistics for your diagnostic test, Rohan. Considering your travel plans, I've scheduled the test at your earliest convenience. You'll receive a confirmation email with the test details and any necessary instructions. If you have any questions or concerns, please don't hesitate to reach out.",
+        "needs_expert": "false",
+        "expert_needed": null,
+        "routing_reason": null,
+        "analysis": "Rohan requested a diagnostic test, and I've coordinated the logistics to ensure a seamless experience.",
+        "recommendations": [
+          "Review test details and instructions",
+          "Reach out to Ruby if you have any questions or concerns"
+        ],
+        "medications": [],
+        "tests": [
+          "Diagnostic test"
+        ],
+        "confidence": 0.95,
+        "proposed_event": {
+          "type": "Scheduling",
+          "description": "Schedule diagnostic test",
+          "reason": "To assess Rohan's current health status and provide valuable insights into his biomarkers",
+          "priority": "High",
+          "metadata": {}
+        }
+      },
+      {
+        "agent": "DrWarren",
+        "message": "Rohan, I'd be happy to provide you with an update on your current biomarkers. Based on your previous test results, your cholesterol levels were 220 mg/dL, and your blood pressure was 130/80 mmHg. Compared to your previous test results, your cholesterol levels have increased by 10 mg/dL, and your blood pressure has remained stable. Given your goals and risk factors, I recommend that we focus on reducing your cholesterol levels through a combination of diet and exercise. I'll work with Carla to design a nutrition plan that targets cholesterol reduction, and Rachel will develop an exercise routine that complements your travel schedule.",
+        "needs_expert": "true",
+        "expert_needed": "Carla",
+        "routing_reason": "Delegating nutrition plan design for cholesterol reduction",
+        "analysis": "Rohan's current biomarkers indicate an increase in cholesterol levels, which is a significant risk factor for heart disease. A comprehensive plan to reduce cholesterol levels is necessary to mitigate this risk.",
+        "recommendations": [
+          "Implement nutrition plan for cholesterol reduction",
+          "Schedule a follow-up test to monitor progress"
+        ],
+        "medications": [],
+        "tests": [
+          "Follow-up lipid profile in 3 months"
+        ],
+        "confidence": 0.95,
+        "proposed_event": {
+          "type": "Consultation",
+          "description": "Consultation between Rohan and Carla to design a nutrition plan for cholesterol reduction.",
+          "reason": "To develop a tailored nutrition plan that targets cholesterol reduction.",
+          "priority": "High",
+          "metadata": {
+            "panel_name": "Lipid Profile",
+            "biomarkers": [
+              "Total Cholesterol",
+              "HDL",
+              "LDL"
+            ],
+            "imaging_type": null
+          }
+        }
+      },
+      {
+        "agent": "Carla",
+        "message": "Rohan, I've reviewed your biomarkers and goals. Given your increased cholesterol levels, I recommend a nutrition plan that targets cholesterol reduction. I'll work with your cook to design a meal plan that incorporates heart-healthy foods, such as lean proteins, whole grains, and vegetables rich in fiber and antioxidants. Specifically, I suggest increasing your intake of omega-3 fatty acids, vitamin D, and potassium-rich foods. I've attached a detailed nutrition document with 5 heart-healthy recipes focusing on lean proteins and complex carbs. I've also included a section on healthy travel snacks as I know you travel frequently. Let me know if you have any questions after reviewing it with your cook.",
+        "needs_expert": "false",
+        "expert_needed": null,
+        "routing_reason": null,
+        "analysis": "Based on Rohan's biomarkers and goals, a nutrition plan targeting cholesterol reduction is necessary. A heart-healthy diet with lean proteins, whole grains, and fiber-rich vegetables can help reduce cholesterol levels.",
+        "recommendations": [
+          "Increase intake of omega-3 fatty acids, vitamin D, and potassium-rich foods",
+          "Incorporate heart-healthy recipes into meal plan",
+          "Focus on lean proteins and complex carbs"
+        ],
+        "medications": [],
+        "tests": [],
+        "confidence": 0.9,
+        "proposed_event": {
+          "type": "Nutritional Protocol",
+          "description": "Heart-healthy nutrition plan targeting cholesterol reduction",
+          "reason": "To reduce cholesterol levels and promote overall heart health",
+          "priority": "High",
+          "metadata": {
+            "foods_to_add": [
+              "fatty fish",
+              "avocado",
+              "whole grains"
+            ],
+            "foods_to_avoid": [
+              "processed meats",
+              "fried foods",
+              "high-sugar snacks"
+            ]
+          }
+        }
+      },
+      {
+        "agent": "Carla",
+        "message": "I'd be happy to discuss how to implement your meal plan while traveling. Considering your busy schedule, I recommend focusing on portable, non-perishable snacks and meals that can be easily prepared in a hotel room or on-the-go. I've attached a list of travel-friendly food options that align with your heart-healthy nutrition plan. Let's schedule a call to review these options in more detail and discuss any specific challenges you anticipate during your trip.",
+        "needs_expert": "false",
+        "expert_needed": null,
+        "routing_reason": null,
+        "analysis": "Rohan's nutrition plan requires adjustments for his upcoming travel plans to ensure he can maintain his heart-healthy diet while on the road.",
+        "recommendations": [
+          "Schedule a call to review travel-friendly food options",
+          "Focus on portable, non-perishable snacks and meals"
+        ],
+        "medications": [],
+        "tests": [],
+        "confidence": 0.9,
+        "proposed_event": {
+          "type": "Coordination",
+          "description": "Schedule a call to review travel-friendly food options and discuss implementation strategies for Rohan's meal plan during his trip.",
+          "reason": "To ensure Rohan can maintain his heart-healthy diet while traveling and minimize disruptions to his nutrition plan.",
+          "priority": "High",
+          "metadata": {
+            "foods_to_add": [
+              "Nuts",
+              "Dried fruits",
+              "Energy bars",
+              "Canned goods"
+            ],
+            "foods_to_avoid": [
+              "High-sodium snacks",
+              "Processed meats"
+            ]
+          }
+        }
+      },
+      {
+        "agent": "Carla",
+        "message": "Rohan, I understand the challenges of maintaining a healthy nutrition plan while traveling. To prioritize your nutrition plan during your trip, I recommend the following: 1) Pack non-perishable snacks like nuts, seeds, and dried fruits to curb unhealthy impulse snacking. 2) Identify healthy food options at your travel destinations and plan your meals accordingly. 3) Consider meal prepping or using a meal delivery service that aligns with your heart-healthy nutrition plan. 4) Stay hydrated by drinking plenty of water throughout the day. 5) Adjust your meal schedule according to your new time zone to minimize disruptions to your body's natural rhythm. I've attached a detailed travel nutrition guide that provides more specific tips and recommendations for your trip. Let's schedule a call to review these suggestions in more detail and discuss any specific challenges you anticipate during your trip.",
+        "needs_expert": "false",
+        "expert_needed": null,
+        "routing_reason": null,
+        "analysis": "Considering Rohan's busy travel schedule and potential time-zone adjustments, it's essential to prioritize his nutrition plan to maintain healthy cholesterol and blood pressure levels.",
+        "recommendations": [
+          "Pack non-perishable snacks",
+          "Identify healthy food options at travel destinations",
+          "Consider meal prepping or using a meal delivery service",
+          "Stay hydrated",
+          "Adjust meal schedule according to new time zone"
+        ],
+        "medications": [],
+        "tests": [],
+        "confidence": 0.95,
+        "proposed_event": {
+          "type": "Nutrition Protocol",
+          "description": "Travel Nutrition Guide",
+          "reason": "To provide Rohan with practical tips and recommendations for maintaining a healthy nutrition plan while traveling.",
+          "priority": "High",
+          "metadata": {
+            "foods_to_add": [
+              "nuts",
+              "seeds",
+              "dried fruits"
+            ],
+            "foods_to_avoid": [
+              "unhealthy impulse snacks"
+            ],
+            "supplement_name": null,
+            "dosage_mg": null
+          }
+        }
+      }
+    ],
+    "active_decision_chains": [
+      {
+        "decision_id": "DC_W1_4011f34f",
+        "triggering_event": "DrWarren made recommendations/decisions",
+        "member_id": "Rohan Patel",
+        "week_index": 1,
+        "priority": "Medium",
+        "status": "implemented",
+        "agent_analyses": [
+          {
+            "agent_name": "DrWarren",
+            "analysis_type": "clinical_analysis",
+            "key_findings": [
+              "Rohan's family history and medical data indicate an elevated risk of heart disease. His ApoB levels are high, which is a significant risk factor. A comprehensive plan requires a tailored nutrition protocol to address this."
+            ],
+            "confidence_level": 0.95,
+            "recommendations": [
+              "Implement nutrition protocol to reduce ApoB levels",
+              "Schedule regular check-ins to monitor progress"
+            ],
+            "concerns": [
+              "Follow-up lipid panel in 3 months"
+            ],
+            "timestamp": "2025-08-18T04:51:22.505233"
+          },
+          {
+            "agent_name": "Advik",
+            "analysis_type": "data_analysis",
+            "key_findings": [
+              "Rohan's Garmin watch data will be used to track sleep quality and stress resilience metrics, providing valuable insights for plan adjustments."
+            ],
+            "confidence_level": 0.9,
+            "recommendations": [
+              "Continue tracking sleep and HRV data with Garmin watch",
+              "Review monthly consolidated health reports for key trends and actionable insights"
+            ],
+            "concerns": [],
+            "timestamp": "2025-08-18T04:55:10.347775"
+          },
+          {
+            "agent_name": "Rachel",
+            "analysis_type": "exercise_analysis",
+            "key_findings": [
+              "Rohan's travel plans may impact his exercise routine. A modified exercise plan is necessary to ensure consistency and minimal disruption."
+            ],
+            "confidence_level": 0.95,
+            "recommendations": [
+              "Review travel schedule and adjust exercise plan accordingly",
+              "Design a modified exercise plan for travel",
+              "Focus on bodyweight exercises and minimal equipment requirements"
+            ],
+            "concerns": [],
+            "timestamp": "2025-08-18T04:57:42.888726"
+          },
+          {
+            "agent_name": "Ruby",
+            "analysis_type": "general_analysis",
+            "key_findings": [
+              "Rohan requested a diagnostic test, and I've coordinated the logistics to ensure a seamless experience."
+            ],
+            "confidence_level": 0.95,
+            "recommendations": [
+              "Review test details and instructions",
+              "Reach out to Ruby if you have any questions or concerns"
+            ],
+            "concerns": [
+              "Diagnostic test"
+            ],
+            "timestamp": "2025-08-18T05:01:20.140365"
+          },
+          {
+            "agent_name": "Carla",
+            "analysis_type": "nutritional_analysis",
+            "key_findings": [
+              "Based on Rohan's biomarkers and goals, a nutrition plan targeting cholesterol reduction is necessary. A heart-healthy diet with lean proteins, whole grains, and fiber-rich vegetables can help reduce cholesterol levels."
+            ],
+            "confidence_level": 0.9,
+            "recommendations": [
+              "Increase intake of omega-3 fatty acids, vitamin D, and potassium-rich foods",
+              "Incorporate heart-healthy recipes into meal plan",
+              "Focus on lean proteins and complex carbs"
+            ],
+            "concerns": [],
+            "timestamp": "2025-08-18T05:04:22.132090"
+          }
+        ],
+        "evidence_considered": [],
+        "risk_assessments": [],
+        "final_decision": "Conversation thread ended",
+        "decision_rationale": "Decision chain completed with conversation",
+        "decision_maker": "System",
+        "decision_timestamp": "2025-08-18T05:09:25.220361",
+        "implementation_status": "not_started",
+        "outcome_metrics": {},
+        "outcome_summary": null,
+        "follow_up_required": false,
+        "next_review_date": null,
+        "created_at": "2025-08-18T04:51:22.505233",
+        "updated_at": "2025-08-18T05:09:25.220361",
+        "tags": []
+      }
+    ],
+    "completed_decision_chains": [],
+    "current_decision_context": null,
+    "new_thread_required": true
+  }
+}

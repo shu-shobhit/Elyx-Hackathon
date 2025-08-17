@@ -75,7 +75,7 @@ def member_node(state: ConversationalState) -> ConversationalState:
         "task": task,
         # "task_description": task_description,
         "member_state": state.get("member_state", {}),
-        "recent_chat": state.get("chat_history", [])[-5:], # Provide last 5 messages for context
+        "recent_chat": state.get("chat_history", [])[-10:], # Provide last 5 messages for context
         "week_index": state.get("week_index", 1)
     }
 

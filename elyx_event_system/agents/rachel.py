@@ -13,7 +13,7 @@ def rachel_node(state: ConversationalState) -> ConversationalState:
     context = {
         "message": state.get("message", ""),
         "member_state": state.get("member_state", {}),
-        "recent_chat": state.get("chat_history", [])[-20:],
+        "recent_chat": state.get("chat_history", [])[-10:],
         "week_index": state.get("week_index", 0),
         "current_agent": state.get("current_agent", "Rachel")
     }
