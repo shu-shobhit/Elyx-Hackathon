@@ -10,6 +10,43 @@ from agents import AGENT_KEYS, AGENT_NODE_MAP, AGENT_FUNC_MAP
 from agents.member import member_node
 from prompts import DECISION_SYSTEM_PROMPT
 
+# -------- Diagnostic Scheduling Function ----------
+def should_schedule_diagnostic(state: ConversationalState) -> bool:
+    """
+    Checks if it's time to schedule a diagnostic test panel (every 12 weeks).
+    """
+    if 'simulation_counters' not in state.get('member_state', {}):
+        return False
+    
+    counters = state['member_state']['simulation_counters']
+    weeks_since_diagnostic = counters.get('weeks_since_last_diagnostic', 0)
+    
+    # Schedule diagnostics every 12 weeks
+    return weeks_since_diagnostic >= 12
+
+def create_diagnostic_event(state: ConversationalState) -> str:
+    """
+    Creates a comprehensive diagnostic event when diagnostics are due.
+    """
+    from utils import create_event
+    
+    # Create the diagnostic event
+    event_id = create_event(
+        state, 
+        event_type="Diagnostic", 
+        description="Comprehensive Health Assessment - 12-week diagnostic panel including blood tests, cardiovascular assessment, body composition, and specialized screenings",
+        reason="Scheduled diagnostic testing due every 12 weeks",
+        priority="High",
+        created_by="System"
+    )
+    
+    # Reset the diagnostic counter
+    if 'simulation_counters' in state.get('member_state', {}):
+        state['member_state']['simulation_counters']['weeks_since_last_diagnostic'] = 0
+    
+    print(f"  -> Created diagnostic event: {event_id}")
+    return event_id
+
 # -------- Quarterly Test Panel Check Function ----------
 def should_run_test_panel(state: ConversationalState) -> bool:
     """
@@ -70,6 +107,14 @@ def decide_next_node(state: ConversationalState) -> str:
     if state.get("member_decision") == "END_TURN":
         print("  -> Member ended their turn. Ending conversation loop.")
         return "END"  # Return "END" to match the conditional edges
+
+    # --- DIAGNOSTIC SCHEDULING CHECK ---
+    # Check if diagnostics are due and schedule them automatically
+    if should_schedule_diagnostic(state):
+        print("  -> Diagnostics due - scheduling comprehensive health assessment")
+        create_diagnostic_event(state)
+        # Route to TestPanel to conduct the diagnostic testing
+        return "TestPanelNode"
 
     # --- DECISION TRACKING INTEGRATION ---
     # Check if we need to create or update a decision chain
@@ -231,6 +276,7 @@ def end_conversation_node(state: ConversationalState) -> ConversationalState:
     state['new_thread_required'] = True
     if 'simulation_counters' in state['member_state']:
         state['member_state']['simulation_counters']['weeks_since_last_trip'] += 1
+        state['member_state']['simulation_counters']['weeks_since_last_diagnostic'] += 1
     
     # Finalize any active decision chains
     active_chains = state.get("active_decision_chains", [])
