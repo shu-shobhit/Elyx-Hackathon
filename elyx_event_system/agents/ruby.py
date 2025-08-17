@@ -5,7 +5,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from prompts import RUBY_SYSTEM
 from utils import llm, append_message, append_agent_response
 from state import ConversationalState
-
+from pprint import pprint
 def ruby_node(state: ConversationalState) -> ConversationalState:
     model = llm(temperature=0.5)
     
@@ -32,12 +32,30 @@ def ruby_node(state: ConversationalState) -> ConversationalState:
             payload["message"] = content
         if "proposed_event" not in payload:
             payload["proposed_event"] = None
+        if "needs_expert" not in payload:
+            payload["needs_expert"] = "false"
+        if "expert_needed" not in payload:
+            payload["expert_needed"] = None
+        if "routing_reason" not in payload:
+            payload["routing_reason"] = ""
     except Exception:
-        payload = {"agent": "Ruby", "message": content, "proposed_event": None}
+        payload = {
+            "agent": "Ruby", 
+            "message": content, 
+            "proposed_event": None,
+            "needs_expert": "false",
+            "expert_needed": None,
+            "routing_reason": ""
+        }
 
     # Update shared state
     append_agent_response(state, payload)
     append_message(state, role="ruby", agent="Ruby", text=payload.get("message", ""), 
                   meta={"source": "agent", "week_index": state.get("week_index", 0)})
+    
+    # Print the response
+    print(f"  -> Ruby says: '{payload.get('message', '')}'")
+    
+    state['message'] = payload.get("message", content)
     
     return state

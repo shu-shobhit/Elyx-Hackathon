@@ -3,6 +3,7 @@ import json
 from typing import Dict, Any
 from orchestrator import build_graph
 from state import ConversationalState
+from pprint import pprint
 
 def main():
     # Initialize the conversation graph
@@ -21,20 +22,31 @@ def main():
         "week_index": 1,
         "pending_agents": [],
         "current_agent": None,
+        "member_decision": None,
         "agent_responses": []
     }
-    
+
     print(f"Initial state: {initial_state}")
     
     # Run the conversation
     print("Invoking conversation graph...")
     try:
-        result = graph.invoke(initial_state)
-        print("Conversation completed successfully!")
+        result = graph.invoke(initial_state, config={"recursion_limit": 100})
+        print("\n=== CONVERSATION COMPLETED ===")
         print(f"Final state keys: {list(result.keys())}")
-        print(f"Agent responses: {len(result.get('agent_responses', []))}")
+        print(f"Total agent responses: {len(result.get('agent_responses', []))}")
+        print(f"Total chat messages: {len(result.get('chat_history', []))}")
         
-        # Print the responses
+        # Print the full conversation
+        print("\n=== FULL CONVERSATION ===")
+        for i, msg in enumerate(result.get('chat_history', [])):
+            role = msg.get('role', 'unknown')
+            agent = msg.get('agent', '')
+            text = msg.get('text', '')
+            print(f"{i+1}. [{role.upper()}{'/' + agent if agent else ''}]: {text}")
+        
+        # Print the agent responses summary
+        print("\n=== AGENT RESPONSES SUMMARY ===")
         for i, response in enumerate(result.get('agent_responses', [])):
             print(f"\n--- Response {i+1} ---")
             print(f"Agent: {response.get('agent')}")
