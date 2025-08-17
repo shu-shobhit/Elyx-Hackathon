@@ -10,6 +10,24 @@ from agents import AGENT_KEYS, AGENT_NODE_MAP, AGENT_FUNC_MAP
 from agents.member import init_member_node, member_node
 from prompts import DECISION_SYSTEM_PROMPT
 
+# -------- Quarterly Test Panel Check Function ----------
+def should_run_test_panel(state: ConversationalState) -> bool:
+    """
+    Checks if it's time to run the quarterly test panel (every 12 weeks).
+    """
+    week_index = state.get("week_index", 0)
+    last_test_panel = state.get("last_test_panel", None)
+    
+    # If no test panel has been run yet, run it at week 0
+    if last_test_panel is None:
+        return True
+    
+    # Check if 12 weeks (3 months) have passed since last test panel
+    last_test_week = last_test_panel.get("week_index", 0)
+    weeks_since_last_test = week_index - last_test_week
+    
+    return weeks_since_last_test >= 12
+
 # -------- Decider Function: Uses LLM to decide which node should come next ----------
 def decide_next_node(state: ConversationalState) -> str:
     """
@@ -18,25 +36,23 @@ def decide_next_node(state: ConversationalState) -> str:
     """
     print("--- Running Node: decider_node ---")
     
+    # Check if it's time for quarterly test panel
+    if should_run_test_panel(state):
+        print(f"  -> Quarterly test panel due, routing to TestPanel")
+        return "TestPanelNode"
+    
     # Get the current conversation context
     chat_history = state.get("chat_history", [])
     member_state = state.get("member_state", {})
     current_message = state.get("message", "")
     member_decision = state.get("member_decision", "CONTINUE_CONVERSATION")
-    agent_responses = state.get("agent_responses", {})
+    
     # Check if member wants to end the conversation
     if member_decision == "END_TURN":
         print(f"  -> Member decided to end turn, ending conversation")
         return "END"
     
-    # # Build context for the LLM
-    # context = {
-    #     "current_message": current_message,
-    #     "recent_chat": chat_history[-10:-1] if chat_history else [], # Last 10 messages
-    #     "recent_agent_responses" : agent_responses[-5:],
-    #     "member_state": member_state,
-    # }
-
+    # Build context for the LLM
     context = f"""Here is the current conversational state. Analyze it according to your instructions and provide your single-word decision.
 CURRENT_STATE:
 {json.dumps(state, indent=2, default=str)}
@@ -136,8 +152,13 @@ def build_graph():
     g.add_conditional_edges("Decider", decide_next_node, decider_edges)
     
     # After each agent responds, collect the response and go back to decider
+    # EXCEPT for TestPanel - it goes directly back to Decider
     for node_name in AGENT_NODE_MAP.values():
-        g.add_edge(node_name, "AgentResponseCollector")
+        if node_name != "TestPanelNode":  # Skip TestPanel for normal flow
+            g.add_edge(node_name, "AgentResponseCollector")
+    
+    # TestPanel goes directly back to Decider (bypassing AgentResponseCollector)
+    g.add_edge("TestPanelNode", "Decider")
     
     # After collecting agent response, go back to decider
     g.add_edge("AgentResponseCollector", "Decider")

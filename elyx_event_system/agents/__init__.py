@@ -4,9 +4,10 @@ from .advik import advik_node
 from .carla import carla_node
 from .rachel import rachel_node
 from .neel import neel_node
+from .test_panel import test_panel_node
 from .member import init_member_node, member_node
 
-AGENT_KEYS = ["Ruby", "DrWarren", "Advik", "Carla", "Rachel", "Neel"]
+AGENT_KEYS = ["Ruby", "DrWarren", "Advik", "Carla", "Rachel", "Neel", "TestPanel"]
 
 AGENT_NODE_MAP = {
     "Ruby": "RubyNode",
@@ -14,7 +15,8 @@ AGENT_NODE_MAP = {
     "Advik": "AdvikNode",
     "Carla": "CarlaNode",
     "Rachel": "RachelNode",
-    "Neel": "NeelNode"
+    "Neel": "NeelNode",
+    "TestPanel": "TestPanelNode"
 }
 
 AGENT_FUNC_MAP = {
@@ -23,7 +25,8 @@ AGENT_FUNC_MAP = {
     "Advik": advik_node,
     "Carla": carla_node,
     "Rachel": rachel_node,
-    "Neel": neel_node
+    "Neel": neel_node,
+    "TestPanel": test_panel_node
 }
 
 # Member functions (not part of the agent routing, but used in the graph)
