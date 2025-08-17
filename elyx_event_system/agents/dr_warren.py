@@ -5,7 +5,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from prompts import DRWARREN_SYSTEM
 from utils import llm, append_message, append_agent_response
 from state import ConversationalState
-
+from pprint import pprint
 def drwarren_node(state: ConversationalState) -> ConversationalState:
     model = llm(temperature=0.35)
     
@@ -39,5 +39,8 @@ def drwarren_node(state: ConversationalState) -> ConversationalState:
     append_agent_response(state, payload)
     append_message(state, role="dr_warren", agent="DrWarren", text=payload.get("message", ""), 
                   meta={"source": "agent", "week_index": state.get("week_index", 0)})
+    
+    # Print the response
+    print(f"  -> DrWarren says: '{payload.get('message', '')}'")
     
     return state

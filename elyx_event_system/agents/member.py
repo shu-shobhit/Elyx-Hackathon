@@ -1,6 +1,7 @@
 # agents/member.py
 import json
 from typing import Dict, Any
+from pprint import pprint
 # LangChain components and your custom modules
 from langchain_core.messages import SystemMessage, HumanMessage
 from prompts import MEMBER_PROFILE, INIT_MEMBER_SYSTEM, MEMBER_SYSTEM
@@ -49,7 +50,18 @@ def member_node(state: ConversationalState) -> ConversationalState:
     # Determine the task: Is this the first message or a reply?
     if not state.get('chat_history'):
         task = "initiate"
-        task_description = "You are starting your journey with Elyx. Generate your first message to your concierge, Ruby. It could be a simple greeting or a question about getting started."
+        task_description = """ Generate an initial query from Alex Tan to the Elyx health consultants team based on the following information:
+                            Top three health/performance goals (with target dates):
+                            Reduce risk of heart disease (due to family history) by maintaining healthy cholesterol and blood pressure levels by December 2026.
+                            Enhance cognitive function and focus for sustained mental performance in a demanding work environment by June 2026.
+                            Implement annual full-body health screenings for early detection of debilitating diseases, starting November 2025.
+                            “Why now?” – Intrinsic motivations & external drivers:
+                            Family history of heart disease; strong desire to proactively manage health for long-term career performance and to remain present and active for his young children.
+                            Success metrics Alex cares about:
+                            Blood panel markers (cholesterol, blood pressure, inflammatory markers), cognitive assessment scores, sleep quality (Garmin data), stress resilience (subjective self-assessment, Garmin HRV).
+
+                            The output message should be written as a professional, concise, and goal-oriented initial message from Alex Tan to Elyx, expressing your initial problems and motivations.
+                            """
     else:
         task = "respond"
         task_description = "The Elyx team has just sent you one or more messages. Based on your current state and the last few messages, generate a realistic response. Decide if you are expecting another reply or if this turn of the conversation is over."
@@ -67,7 +79,7 @@ def member_node(state: ConversationalState) -> ConversationalState:
         SystemMessage(content=MEMBER_SYSTEM),
         HumanMessage(content=json.dumps(context, indent=2))
     ]).content
-
+    
     try:
         payload = json.loads(content)
         # Ensure the payload has the required keys
@@ -85,7 +97,7 @@ def member_node(state: ConversationalState) -> ConversationalState:
     state['message'] = message_text
     
     # Add the member's message to the history
-    append_message(state, role="member", text=message_text, meta={"decision": decision})
+    append_message(state, role="member", agent="member", text=message_text, meta={"decision": decision})
     
     # The 'decision' field can now be used by LangGraph's conditional routing
     # to decide whether to go to Ruby or to end the loop.

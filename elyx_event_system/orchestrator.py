@@ -1,111 +1,176 @@
+# orchestrator.py
 import json
 from typing import Dict, Any
 from langgraph.graph import StateGraph, START, END
 from langchain_core.messages import SystemMessage, HumanMessage
-
+from pprint import pprint
 from state import ConversationalState
 from utils import llm, append_message, append_agent_response
 from agents import AGENT_KEYS, AGENT_NODE_MAP, AGENT_FUNC_MAP
+from agents.member import init_member_node, member_node
 
 
-# -------- Ruby First Response node: Ruby always responds first and decides routing ----------
-def ruby_first_response_node(state: ConversationalState) -> ConversationalState:
+# -------- Decider Function: Uses LLM to decide which node should come next ----------
+def decide_next_node(state: ConversationalState) -> str:
     """
-    Ruby is always the first point of contact. She responds to the member's query
-    and decides if she needs to route to other experts.
+    Uses LLM to analyze the current conversation state and decide which agent
+    should respond next, if the member should speak next, or if the conversation should end.
     """
-    # Set Ruby as the first agent
-    state["pending_agents"] = ["Ruby"]
-    state["current_agent"] = "Ruby"
-    state["agent_responses"] = []
-    return state
-
-# -------- Conditional selector: where to go next ----------
-def route_next(state: ConversationalState) -> str:
-    pending = state.get("pending_agents", [])
-    if not pending:
-        return "Collector"
+    print("--- Running Node: decider_node ---")
     
-    # Get the next agent
-    nxt = pending.pop(0)
-    state["current_agent"] = nxt
-    state["pending_agents"] = pending
+    # Get the current conversation context
+    chat_history = state.get("chat_history", [])
+    member_state = state.get("member_state", {})
+    current_message = state.get("message", "")
+    member_decision = state.get("member_decision", "CONTINUE_CONVERSATION")
+    agent_responses = state.get("agent_responses", {})
+    # Check if member wants to end the conversation
+    if member_decision == "END_TURN":
+        print(f"  -> Member decided to end turn, ending conversation")
+        return "END"
     
-    return AGENT_NODE_MAP[nxt]
+    # Build context for the LLM
+    context = {
+        "current_message": current_message,
+        "recent_chat": chat_history[-10:-1] if chat_history else [], # Last 10 messages
+        "recent_agent_responses" : agent_responses[-5:],
+        "member_state": member_state,
+    }
+    
+    
+    # Create the decision prompt
+    decision_prompt = f"""
+You are the conversation flow controller for Elyx, a preventative healthcare service.
 
-# -------- Ruby Expert Routing node: handles Ruby's decision to route to experts ----------
-def ruby_routing_node(state: ConversationalState) -> ConversationalState:
+**Current Context:**
+- Member's latest message: "{current_message}"
+- Recent conversation: {json.dumps([msg.get('text', '') for msg in context['recent_chat']], indent=2)}
+- Member state: {json.dumps(member_state, indent=2)}
+
+**Available Options:**
+- Ruby: Concierge/Primary contact (general coordination, logistics)
+- DrWarren: Medical strategist (labs, diagnostics, clinical decisions)
+- Advik: Performance scientist (wearable data, sleep, HRV analysis)
+- Carla: Nutritionist (diet, CGM, supplements)
+- Rachel: Physiotherapist (exercise, mobility, rehab)
+- Neel: Strategic lead (QBRs, long-term planning)
+- Member: Let the member speak next (they should respond to the last agent)
+- END: End the conversation
+
+**Decision Rules:**
+1. **CRITICAL**: If the last message in the conversation is from an agent, then choose next among other options.
+2. If the last message is from the member and requires a response, choose the most appropriate agent.
+3. If the conversation feels complete and the member feels satisfied, return "END".
+4. Ruby should handle general questions and coordination.
+5. Specialized questions should go to the appropriate expert.
+6. **IMPORTANT**: After ANY agent responds, typically the member should have a chance to reply before another agent speaks.
+
+**Output Format:**
+Return ONLY the agent name (e.g., "Ruby", "DrWarren"), "Member", or "END".
+"""
+
+    model = llm(temperature=0.1)  # Low temperature for consistent decisions
+    
+    try:
+        decision = model.invoke([
+            SystemMessage(content="You are a conversation flow controller. Respond with only the agent name, 'Member', or 'END'."),
+            HumanMessage(content=decision_prompt)
+        ]).content.strip()
+        
+        print(f"  -> Decider chose: {decision}")
+        
+        # Validate the decision
+        if decision == "END":
+            return "END"
+        elif decision == "Member":
+            return "Member"
+        elif decision in AGENT_KEYS:
+            return AGENT_NODE_MAP[decision]
+        else:
+            print(f"  -> Invalid decision '{decision}', defaulting to Member")
+            return "Member"
+            
+    except Exception as e:
+        print(f"  -> Error in decider: {e}, defaulting to Member")
+        return "Member"
+
+
+# -------- Decider Node: Just passes through the state ----------
+def decider_node(state: ConversationalState) -> ConversationalState:
     """
-    This node processes Ruby's response and determines if she needs to route to experts.
-    Experts will respond directly to the member after Ruby routes to them.
+    This node just passes through the state. The actual decision logic
+    is handled by the conditional edge function.
     """
-    # Get Ruby's last response
+    return {}
+
+
+# -------- Agent Response Collector Node ----------
+def agent_response_collector(state: ConversationalState) -> ConversationalState:
+    """
+    Collects and processes the agent's response. The agent has already added
+    their response to chat history, so this node just passes through the state.
+    """
+    print("--- Running Node: agent_response_collector ---")
+    
+    # Get the last agent response for logging
     agent_responses = state.get("agent_responses", [])
-    ruby_response = None
-    
-    for response in agent_responses:
-        if response.get("agent") == "Ruby":
-            ruby_response = response
-            break
-    
-    if ruby_response and ruby_response.get("needs_expert") == "true":
-        expert_needed = ruby_response.get("expert_needed")
-        if expert_needed and expert_needed in AGENT_KEYS:
-            # Add the needed expert to the pending queue
-            current_pending = state.get("pending_agents", [])
-            if expert_needed not in current_pending:
-                state["pending_agents"] = [expert_needed] + current_pending
-                print(f"Ruby has routed to {expert_needed} for: {ruby_response.get('routing_reason', '')}")
+    if agent_responses:
+        last_response = agent_responses[-1]
+        agent_name = last_response.get("agent", "Unknown")
+        print(f"  -> Processed {agent_name}'s response")
     
     return state
 
-# Ruby doesn't need to coordinate after experts - they respond directly to the member
 
-# -------- Collector node ----------
-def collector_node(state: ConversationalState) -> ConversationalState:
+# -------- End Conversation Node ----------
+def end_conversation_node(state: ConversationalState) -> ConversationalState:
+    """
+    Handles the end of the conversation turn.
+    """
+    print("--- Running Node: end_conversation_node ---")
+    print("  -> Conversation turn ended")
     return state
+
 
 def build_graph():
     g = StateGraph(ConversationalState)
 
-    # Nodes
-    g.add_node("RubyFirst", ruby_first_response_node)
-    g.add_node("RubyRouting", ruby_routing_node)
-    g.add_node("Collector", collector_node)
+    # Core nodes
+    g.add_node("InitMember", init_member_node)
+    g.add_node("Member", member_node)
+    g.add_node("Decider", decider_node)
+    g.add_node("AgentResponseCollector", agent_response_collector)
+    g.add_node("EndConversation", end_conversation_node)
 
     # Agent nodes
     for agent_key, func in AGENT_FUNC_MAP.items():
         g.add_node(AGENT_NODE_MAP[agent_key], func)
 
-    # Flow: Start → RubyFirst → RubyNode → RubyRouting → route_next
-    g.add_edge(START, "RubyFirst")
-    g.add_edge("RubyFirst", "RubyNode")
-    g.add_edge("RubyNode", "RubyRouting")
+    # Main flow: Start → InitMember → Member → Decider
+    g.add_edge(START, "InitMember")
+    g.add_edge("InitMember", "Member")
+    g.add_edge("Member", "Decider")
     
-    # After RubyRouting, go to the conditional selector
-    g.add_conditional_edges("RubyRouting", route_next, {
-        "RubyNode": "RubyNode",
-        "DrWarrenNode": "DrWarrenNode",
-        "AdvikNode": "AdvikNode",
-        "CarlaNode": "CarlaNode",
-        "RachelNode": "RachelNode",
-        "NeelNode": "NeelNode",
-        "Collector": "Collector"
-    })
-
-    # After other agents, go to the conditional selector
+    # Decider routes to agents, member, or ends conversation
+    decider_edges = {
+        "END": "EndConversation",
+        "Member": "Member"
+    }
+    
+    # Add edges for all agents
     for node_name in AGENT_NODE_MAP.values():
-        if node_name != "RubyNode":  # Skip Ruby since we handle it above
-            g.add_conditional_edges(node_name, route_next, {
-                "RubyNode": "RubyNode",
-                "DrWarrenNode": "DrWarrenNode",
-                "AdvikNode": "AdvikNode",
-                "CarlaNode": "CarlaNode",
-                "RachelNode": "RachelNode",
-                "NeelNode": "NeelNode",
-                "Collector": "Collector"
-            })
-
-    # When no more agents are pending, go directly to END
-    g.add_edge("Collector", END)
+        decider_edges[node_name] = node_name
+    
+    g.add_conditional_edges("Decider", decide_next_node, decider_edges)
+    
+    # After each agent responds, collect the response and go back to decider
+    for node_name in AGENT_NODE_MAP.values():
+        g.add_edge(node_name, "AgentResponseCollector")
+    
+    # After collecting agent response, go back to decider
+    g.add_edge("AgentResponseCollector", "Decider")
+    
+    # End the conversation
+    g.add_edge("EndConversation", END)
+    
     return g.compile()

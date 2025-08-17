@@ -5,7 +5,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from prompts import RUBY_SYSTEM
 from utils import llm, append_message, append_agent_response
 from state import ConversationalState
-
+from pprint import pprint
 def ruby_node(state: ConversationalState) -> ConversationalState:
     model = llm(temperature=0.5)
     
@@ -52,5 +52,10 @@ def ruby_node(state: ConversationalState) -> ConversationalState:
     append_agent_response(state, payload)
     append_message(state, role="ruby", agent="Ruby", text=payload.get("message", ""), 
                   meta={"source": "agent", "week_index": state.get("week_index", 0)})
+    
+    # Print the response
+    print(f"  -> Ruby says: '{payload.get('message', '')}'")
+    
+    state['message'] = payload.get("message", content)
     
     return state
