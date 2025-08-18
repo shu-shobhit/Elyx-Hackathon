@@ -1,6 +1,9 @@
 ================================================================================
-📋 COMPLETE CONVERSATION LOG
+📋 WEEK 1 CONVERSATION LOG
 ================================================================================
+
+Week 1 Messages (18 total):
+--------------------------------------------------
 
   1. [Mon, Dec 30, 10:25 AM] [MEMBER]: Hi, I'm Rohan Patel. As we begin, I'd like to discuss my goals, specifically reducing the risk of heart disease. Can you provide an overview of the plan to manage my cholesterol and blood pressure levels?
   2. [Mon, Dec 30, 11:40 AM] [RUBY]: Hi Rohan, thank you for sharing your goals with me. I understand your primary focus is on reducing the risk of heart disease by managing your cholesterol and blood pressure levels. I've reviewed your file, and I'd like to provide a comprehensive plan to address your concerns. Our medical strategist, Dr. Warren, will work closely with you to develop a personalized plan. In the meantime, I've attached a detailed nutrition document with 5 heart-healthy recipes focusing on lean proteins and complex carbs. I've also included a section on healthy travel snacks, considering your frequent travel schedule. Additionally, I've scheduled a follow-up with Dr. Warren to discuss your lab results and medical strategy. You can expect a call from her within the next 48 hours.
@@ -23,8 +26,7 @@
 
 ================================================================================
 
-=== SIMULATION SUMMARY ===
-Completed 1 weeks with 18 total messages
-Active events: 0, Completed: 0
-Decision chains - Active: 1, Completed: 0
-Generated on: 2025-08-18 05:32:21
+=== WEEK 1 SUMMARY ===
+Week: 1
+Messages this week: 18
+Generated on: 2025-08-18 10:45:26
