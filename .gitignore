@@ -2,3 +2,4 @@
 myenv/
 elyx_event_system/__pycache__/
 elyx_event_system/agents/__pycache__
+elyx_event_system\advanced_dashboard.py
