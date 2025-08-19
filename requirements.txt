@@ -4,3 +4,6 @@ langgraph
 python-dotenv
 streamlit
 plotly
+pandas
+numpy
+networkx
